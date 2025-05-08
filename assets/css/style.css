@@ -1,0 +1,193 @@
+/* Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #f5f5f5;
+    color: #333;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #2c3e50;
+}
+
+/* Form Styles */
+.form-group {
+    margin-bottom: 15px;
+}
+
+.remember_me{
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    gap: 0.5rem;
+}
+.remember_me p{
+    margin: 0;
+    padding: 0;
+}
+.remember_me .rm{
+    display: flex;
+    justify-content: end;
+    width: auto;
+}
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: #800000;
+}
+
+.btn {
+    display: inline-block;
+    width: 100%;
+    padding: 10px;
+    background: #800000;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.btn:hover {
+    background: #5c0000;
+}
+
+.form-footer {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 14px;
+}
+
+.form-footer a {
+    color: #800000;
+    text-decoration: none;
+}
+
+.form-footer a:hover {
+    text-decoration: underline;
+}
+
+/* Alert Styles */
+.alert {
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+}
+
+.alert.error {
+    background: #ffebee;
+    color: #c62828;
+    border-left: 4px solid #c62828;
+}
+
+.alert.success {
+    background: #e8f5e9;
+    color: #2e7d32;
+    border-left: 4px solid #2e7d32;
+}
+
+.alert.info {
+    background: #e3f2fd;
+    color: #1565c0;
+    border-left: 4px solid #1565c0;
+}
+
+/* Auth Options */
+.auth-options {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.auth-options .btn {
+    width: 48%;
+}
+
+/* User Info */
+.user-info {
+    margin: 20px 0;
+    padding: 15px;
+    background: #f9f9f9;
+    border-radius: 4px;
+}
+
+.user-info p {
+    margin-bottom: 10px;
+}
+
+.actions {
+    text-align: center;
+}
+
+a{
+    text-decoration: none;
+}
+
+/* index */
+
+.hero {
+    background-image: url("https://sorsu.edu.ph/wp-content/uploads/2024/03/BULAN-CAMPUS-FB-PAGE-BLESSING-AND-RIBBON-CUTTING-OF-GATE-1-1536x1025.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    height: 100svh;
+}
+.sub-hero {
+    background-color: yellow;
+    height: 100svh;
+    text-align: center;
+    color: white;
+    background-color: #00000098;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.sub-hero h1{
+    font-size: 3rem;
+    color: white;
+    flex-wrap: wrap;
+}
+
+div .auth-options{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    max-width: 40rem;
+    width: 100%;
+    flex-direction: column;
+}
