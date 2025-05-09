@@ -131,6 +131,11 @@ $user = $stmt->fetch();
             z-index: 90;
         }
 
+        .header-left {
+            display: flex;
+            align-items: center;
+        }
+
         .header-left h2 {
             color: var(--dark-color);
             font-size: 22px;
@@ -266,28 +271,8 @@ $user = $stmt->fetch();
             border-left: 4px solid #10b981;
         }
 
-        /* Responsive Styles */
-        @media (max-width: 768px) {
-            .sidebar {
-                transform: translateX(calc(-1 * var(--sidebar-width)));
-            }
-
-            .sidebar.active {
-                transform: translateX(0);
-                box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
-            }
-
-            .main-content {
-                margin-left: 0;
-            }
-
-            .menu-toggle {
-                display: block !important;
-            }
-        }
-
+        /* Menu Toggle Styles */
         .menu-toggle {
-            display: none;
             background: none;
             border: none;
             font-size: 20px;
@@ -371,6 +356,21 @@ $user = $stmt->fetch();
             opacity: 1;
             visibility: visible;
         }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(calc(-1 * var(--sidebar-width)));
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+        }
     </style>
 </head>
 <body>
@@ -397,23 +397,42 @@ $user = $stmt->fetch();
                     </li>
                     <li>
                         <a href="courses.php">
-                            <i class="fas fa-book"></i> Courses
+                            <i class="fas fa-message"></i> Chat
                         </a>
                     </li>
                     <li>
                         <a href="messages.php">
-                            <i class="fas fa-envelope"></i> Messages
-                            <span class="badge">3</span>
+                            <i class="fas fa-clipboard-list"></i> Pre-Registration
                         </a>
                     </li>
                     <li>
                         <a href="settings.php">
-                            <i class="fas fa-cog"></i> Settings
+                            <i class="fas fa-user-graduate"></i> Student Assessment
                         </a>
                     </li>
                     <li>
                         <a href="help.php">
-                            <i class="fas fa-question-circle"></i> Help
+                            <i class="fas fa-file-signature"></i> Individual Form
+                        </a>
+                    </li>
+                    <li>
+                        <a href="help.php">
+                            <i class="fas fa-chart-line"></i> My Grades
+                        </a>
+                    </li>
+                    <li>
+                        <a href="help.php">
+                        <i class="fas fa-scroll"></i> My Permanent Record
+                        </a>
+                    </li>
+                    <li>
+                        <a href="help.php">
+                            <i class="fas fa-clipboard-check"></i> Enrollment Status
+                        </a>
+                    </li>
+                    <li>
+                        <a href="help.php">
+                            <i class="fas fa-bug"></i> Report Bugs
                         </a>
                     </li>
                 </ul>
@@ -424,16 +443,16 @@ $user = $stmt->fetch();
         <div class="main-content" id="mainContent">
             <!-- Header -->
             <header class="header">
-                <button class="menu-toggle" id="menuToggle">
-                    <i class="fas fa-bars"></i>
-                </button>
                 <div class="header-left">
+                    <button class="menu-toggle" id="menuToggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
                     <h2>Dashboard</h2>
                 </div>
                 <div class="header-right">
                     <div class="profile-dropdown">
                         <div class="profile">
-                            <img src="https://ui-avatars.com/api/?name=<?php echo urlencode($user['firstname'].'+'.$user['lastname']); ?>&background=random" alt="Profile" class="profile-img">
+                            <img src="https://ui-avatars.com/api/?name=<?php echo urlencode($user['firstname'].'+'.$user['lastname']); ?>&background=f5f7fa" alt="Profile" class="profile-img">
                             <span class="profile-name"><?php echo htmlspecialchars($user['firstname']); ?></span>
                             <i class="fas fa-chevron-down"></i>
                         </div>
@@ -493,49 +512,79 @@ $user = $stmt->fetch();
     </div>
 
     <script>
-        // Toggle sidebar on mobile
-        const menuToggle = document.getElementById('menuToggle');
-        const sidebar = document.getElementById('sidebar');
-        const mainContent = document.getElementById('mainContent');
-        const sidebarOverlay = document.getElementById('sidebarOverlay');
-
-        menuToggle.addEventListener('click', function() {
-            sidebar.classList.toggle('active');
-            sidebarOverlay.classList.toggle('active');
-            menuToggle.classList.toggle('rotated');
+        document.addEventListener('DOMContentLoaded', function() {
+            const menuToggle = document.getElementById('menuToggle');
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('mainContent');
+            const sidebarOverlay = document.getElementById('sidebarOverlay');
             
-            // On desktop, we want to collapse/expand the sidebar
-            if (window.innerWidth > 768) {
-                sidebar.classList.toggle('collapsed');
-                mainContent.classList.toggle('expanded');
+            // Check if there's a saved state in localStorage
+            const sidebarState = localStorage.getItem('sidebarCollapsed');
+            
+            // Initialize sidebar state
+            if (sidebarState === 'true') {
+                sidebar.classList.add('collapsed');
+                mainContent.classList.add('expanded');
+            } else if (window.innerWidth <= 768) {
+                // On mobile, collapse by default
+                sidebar.classList.add('collapsed');
+                mainContent.classList.add('expanded');
             }
-        });
-
-        // Close sidebar when clicking outside on mobile
-        sidebarOverlay.addEventListener('click', function() {
-            sidebar.classList.remove('active');
-            sidebarOverlay.classList.remove('active');
-            menuToggle.classList.remove('rotated');
-        });
-
-        // Make sidebar responsive on window resize
-        window.addEventListener('resize', function() {
-            if (window.innerWidth > 768) {
+            
+            // Toggle sidebar
+            menuToggle.addEventListener('click', function() {
+                // For mobile view
+                if (window.innerWidth <= 768) {
+                    sidebar.classList.toggle('active');
+                    sidebarOverlay.classList.toggle('active');
+                    menuToggle.classList.toggle('rotated');
+                } 
+                // For desktop view
+                else {
+                    sidebar.classList.toggle('collapsed');
+                    mainContent.classList.toggle('expanded');
+                    
+                    // Save state to localStorage
+                    const isCollapsed = sidebar.classList.contains('collapsed');
+                    localStorage.setItem('sidebarCollapsed', isCollapsed);
+                }
+            });
+            
+            // Close sidebar when clicking outside on mobile
+            sidebarOverlay.addEventListener('click', function() {
                 sidebar.classList.remove('active');
                 sidebarOverlay.classList.remove('active');
                 menuToggle.classList.remove('rotated');
-            } else {
-                // On mobile, ensure sidebar is hidden by default
-                if (!sidebar.classList.contains('active')) {
-                    sidebar.classList.add('collapsed');
+            });
+            
+            // Handle window resize
+            window.addEventListener('resize', function() {
+                if (window.innerWidth > 768) {
+                    // On desktop, ensure overlay is hidden
+                    sidebarOverlay.classList.remove('active');
+                    menuToggle.classList.remove('rotated');
+                    
+                    // If sidebar was active (mobile view), transition to collapsed state
+                    if (sidebar.classList.contains('active')) {
+                        sidebar.classList.remove('active');
+                        const isCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
+                        if (isCollapsed) {
+                            sidebar.classList.add('collapsed');
+                            mainContent.classList.add('expanded');
+                        } else {
+                            sidebar.classList.remove('collapsed');
+                            mainContent.classList.remove('expanded');
+                        }
+                    }
+                } else {
+                    // On mobile, ensure sidebar is collapsed by default
+                    if (!sidebar.classList.contains('active')) {
+                        sidebar.classList.add('collapsed');
+                        mainContent.classList.add('expanded');
+                    }
                 }
-            }
+            });
         });
-
-        // Initialize based on screen size
-        if (window.innerWidth <= 768) {
-            sidebar.classList.add('collapsed');
-        }
     </script>
 </body>
 </html>

@@ -16,6 +16,6 @@ try {
 }
 
 // Site settings
-define('SITE_NAME', 'SorSU Online');
+define('SITE_NAME', 'Academic Portal');
 define('SITE_URL', 'http://localhost/ssu-auth-system');
 ?>

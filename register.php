@@ -40,18 +40,23 @@
             
             <div class="form-group">
                 <label for="course">Course</label>
-                <select id="course" name="course" required>
+                <select name="course" required>
+                    <option value="" disabled selected>Select your course</option>
+                    <option value="BSIS">BSIS</option>
                     <option value="BSIT">BSIT</option>
-                    <option value="BSIT">BSIT</option>
-                    <option value="BSIT">BSIT</option>
-                    <option value="BSIT">BSIT</option>
-                    <option value="BSIT">BSIT</option>
+                    <option value="BSCS">BSCS</option>
+                    <option value="BTVTED">BTVTED</option>
+                    <option value="BPA">BPA</option>
+                    <option value="BSA">BSA</option>
+                    <option value="BSAIS">BSAIS</option>
+                    <option value="BSE">BSE</option>
                 </select>
             </div>
             
             <div class="form-group">
                 <label for="year_level">Year Level</label>
                 <select id="year_level" name="year_level" required>
+                    <option value="" disabled selected>Select year level</option>
                     <option value="1st Year">1st Year</option>
                     <option value="2nd Year">2nd Year</option>
                     <option value="3rd Year">3rd Year</option>
