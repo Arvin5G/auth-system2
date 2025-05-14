@@ -254,7 +254,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     </div>
 
-    <?php include 'components/script.php'; ?>
+    
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const toggleEdit = document.getElementById('toggleEdit');
@@ -294,5 +294,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             });
         });
     </script>
+    <?php include 'components/script.php'; ?>
 </body>
 </html>
