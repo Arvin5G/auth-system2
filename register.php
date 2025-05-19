@@ -11,7 +11,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>Register</h1>
+        <h1>Register Test</h1>
         
         <?php if (isset($_GET['error'])): ?>
             <div class="alert error"><?php echo htmlspecialchars($_GET['error']); ?></div>
