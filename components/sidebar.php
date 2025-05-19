@@ -61,6 +61,12 @@
                     <i class="fas fa-bug"></i> Report Bugs
                 </a>
             </li>
+            <!-- Logout Button -->
+            <li>
+                <a href="logout.php" onclick="return confirm('Are you sure you want to logout?');">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+            </li>
         </ul>
     </div>
 </div>

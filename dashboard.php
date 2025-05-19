@@ -43,11 +43,11 @@ $pageTitle = 'Dashboard';
                         <h1>Dashboard Overview</h1>
                         <p>Welcome back, <?php echo htmlspecialchars($user['firstname']); ?>! Here's what's happening today.</p>
                     </div>
-                    <div class="page-actions">
+                    <!-- <div class="page-actions">
                         <a href="#" class="btn btn-primary">
                             <i class="fas fa-plus"></i> Quick Action
                         </a>
-                    </div>
+                    </div> -->
                 </div>
                 
                 <!-- Dashboard Stats Cards -->

@@ -2,19 +2,18 @@
 require_once 'config.php';
 require_once 'vendor/autoload.php'; // Load Composer autoloader once
 
-use Google\Authenticator\GoogleAuthenticator;
-
-function generateSecretKey() {
-    require_once 'vendor/autoload.php'; // You'll need to install "sonata-project/google-authenticator"
-    $g = new \Sonata\GoogleAuthenticator\GoogleAuthenticator();
-    return $g->generateSecret();
-}
+// function generateSecretKey() {
+//     require_once 'vendor/autoload.php'; // You'll need to install "sonata-project/google-authenticator"
+//     $g = new \Sonata\GoogleAuthenticator\GoogleAuthenticator();
+//     return $g->generateSecret();
+// }
 
 // function getQRCode($username, $secret) {
 //     $issuer = SITE_NAME;
 //     $qrCodeUrl = "otpauth://totp/{$issuer}:{$username}?secret={$secret}&issuer={$issuer}";
 //     return "https://chart.googleapis.com/chart?chs=200x200&chld=M|0&cht=qr&chl=" . urlencode($qrCodeUrl);
 // }
+
 function getQRCode($username, $secret) {
     $issuer = SITE_NAME;
     $data = urlencode("otpauth://totp/{$issuer}:{$username}?secret={$secret}&issuer={$issuer}");
