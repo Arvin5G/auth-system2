@@ -11,11 +11,21 @@
     </div>
     <div class="header-right">
         <div class="profile-dropdown">
-            <div class="profile">
+            <!-- <div class="profile">
                 <img src="https://ui-avatars.com/api/?name=<?php echo urlencode($user['firstname'].'+'.$user['lastname']); ?>&background=f5f7fa" alt="Profile" class="profile-img">
                 <span class="profile-name"><?php echo htmlspecialchars($user['firstname']); ?></span>
                 <i class="fas fa-chevron-down"></i>
+            </div> -->
+
+            <div class="profile">
+                <img src="<?php echo isset($_SESSION['profile_pic']) && $_SESSION['profile_pic'] ? htmlspecialchars($_SESSION['profile_pic']) : 'https://ui-avatars.com/api/?name='.urlencode($user['firstname'].'+'.$user['lastname']).'&background=f5f7fa'; ?>" 
+                alt="Profile" 
+                class="profile-img"
+                style="width: 40px; height: 40px; object-fit: cover; border-radius: 50%; border: 2px solid #fff;">
+                <span class="profile-name"><?php echo htmlspecialchars($user['firstname']); ?></span>
+                <i class="fas fa-chevron-down"></i>
             </div>
+
             <div class="dropdown-menu">
                 <a href="profile.php">
                     <i class="fas fa-user"></i> My Profile

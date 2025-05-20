@@ -59,16 +59,56 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors['year_level'] = 'Year level is required';
     }
 
+    // Handle profile picture upload
+    $profilePicPath = $user['profile_pic']; // Keep existing if no new upload
+    
+    if (isset($_FILES['profile_pic']) && $_FILES['profile_pic']['error'] === UPLOAD_ERR_OK) {
+        $uploadDir = 'uploads/profile_pics/';
+        if (!file_exists($uploadDir)) {
+            mkdir($uploadDir, 0755, true);
+        }
+
+        $file = $_FILES['profile_pic'];
+        $allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+        $fileType = mime_content_type($file['tmp_name']);
+        
+        if (!in_array($fileType, $allowedTypes)) {
+            $errors['profile_pic'] = 'Invalid file type. Only JPG, PNG, GIF allowed.';
+        } elseif ($file['size'] > 2097152) { // 2MB
+            $errors['profile_pic'] = 'File too large. Max 2MB allowed.';
+        } else {
+            // Delete old image if it exists
+            if ($user['profile_pic'] && file_exists($user['profile_pic'])) {
+                unlink($user['profile_pic']);
+            }
+
+            // Generate unique filename
+            $fileName = uniqid('profile_') . '.' . pathinfo($file['name'], PATHINFO_EXTENSION);
+            $destination = $uploadDir . $fileName;
+
+            if (move_uploaded_file($file['tmp_name'], $destination)) {
+                $profilePicPath = $destination;
+                
+                // Resize image (optional)
+                require_once 'includes/image_resizer.php';
+                resizeImage($destination, 300, 300);
+            } else {
+                $errors['profile_pic'] = 'Failed to upload image.';
+            }
+        }
+    }
+
     // If no errors, update database
     if (empty($errors)) {
         try {
-            $stmt = $pdo->prepare("UPDATE users SET firstname = ?, lastname = ?, email = ?, course = ?, year_level = ? WHERE id = ?");
+            $stmt = $pdo->prepare("UPDATE users SET firstname = ?, lastname = ?, email = ?, course = ?, year_level = ?, profile_pic = ? WHERE id = ?");
             $stmt->execute([
                 $formData['firstname'],
                 $formData['lastname'],
                 $formData['email'],
                 $formData['course'],
                 $formData['year_level'],
+                $profilePicPath,
                 $_SESSION['user_id']
             ]);
             
@@ -79,10 +119,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->execute([$_SESSION['user_id']]);
             $user = $stmt->fetch();
             
+            // Update session data if needed
+            $_SESSION['profile_pic'] = $profilePicPath;
+            
         } catch (PDOException $e) {
             $errors['database'] = 'Error updating profile: ' . $e->getMessage();
         }
     }
+
 }
 ?>
 
@@ -184,7 +228,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <div class="card-header">
                         <h3>Edit Profile</h3>
                     </div>
-                    <form method="POST" action="profile.php" class="card-content">
+                    <form method="POST" action="profile.php" class="card-content" enctype="multipart/form-data">
                         <div class="form-group">
                             <label for="firstname">First Name</label>
                             <input type="text" id="firstname" name="firstname" class="form-control <?php echo isset($errors['firstname']) ? 'is-invalid' : ''; ?>" 
@@ -211,6 +255,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <div class="error-message"><?php echo htmlspecialchars($errors['email']); ?></div>
                             <?php endif; ?>
                         </div>
+
+                        <div class="form-group">
+    <label for="profile_pic">Profile Picture</label>
+    <div style="margin-bottom: 15px;">
+        <img id="profilePicPreview" 
+             src="<?php echo $user['profile_pic'] ? htmlspecialchars($user['profile_pic']) : 'https://ui-avatars.com/api/?name='.urlencode($user['firstname'].'+'.$user['lastname']).'&background=f5f7fa'; ?>" 
+             style="width: 150px; height: 150px; object-fit: cover; border-radius: 50%; border: 3px solid #eee; display: block;">
+    </div>
+    <input type="file" id="profile_pic" name="profile_pic" accept="image/jpeg, image/png, image/gif" onchange="previewImage(this)">
+    <?php if (isset($errors['profile_pic'])): ?>
+        <div class="error-message"><?php echo htmlspecialchars($errors['profile_pic']); ?></div>
+    <?php endif; ?>
+    <small class="text-muted">Max 2MB. JPG, PNG, or GIF.</small>
+</div>
 
                         <div class="form-group">
                             <label for="course">Course</label>
@@ -256,6 +314,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     
     <script>
+        function previewImage(input) {
+            const preview = document.getElementById('profilePicPreview');
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        // Force header to reload when profile is updated
+        window.addEventListener('load', function() {
+            if (window.performance && performance.navigation.type === 1) {
+                // Page was reloaded (likely after form submission)
+                // Force reload header image
+                const headerImg = document.querySelector('.header .profile-img');
+                if (headerImg) {
+                    headerImg.src = headerImg.src.split('?')[0] + '?t=' + new Date().getTime();
+                }
+            }
+        });
         document.addEventListener('DOMContentLoaded', function() {
             const toggleEdit = document.getElementById('toggleEdit');
             const cancelEdit = document.getElementById('cancelEdit');

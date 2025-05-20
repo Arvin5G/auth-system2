@@ -1,5 +1,7 @@
-<?php require_once 'includes/config.php'; ?>
-<?php require_once 'includes/functions.php'; ?>
+<?php 
+require_once 'includes/config.php';
+require_once 'includes/functions.php';
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -8,16 +10,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register - <?php echo SITE_NAME; ?></title>
     <link rel="stylesheet" href="assets/css/style.css">
+    <style>
+        .image-preview {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #ddd;
+            margin: 10px 0;
+            display: none;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-        <h1>Register Test</h1>
+        <h1>Register</h1>
         
         <?php if (isset($_GET['error'])): ?>
             <div class="alert error"><?php echo htmlspecialchars($_GET['error']); ?></div>
         <?php endif; ?>
         
-        <form action="create_account.php" method="post">
+        <form action="create_account.php" method="post" enctype="multipart/form-data">
+
+        <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+
             <div class="form-group">
                 <label for="firstname">First Name</label>
                 <input type="text" id="firstname" name="firstname" required>
@@ -31,6 +47,13 @@
             <div class="form-group">
                 <label for="username">Username</label>
                 <input type="text" id="username" name="username" required>
+            </div>
+
+            <div class="form-group">
+                <label for="profile_pic">Profile Picture</label>
+                <input type="file" id="profile_pic" name="profile_pic" accept="image/jpeg, image/png, image/gif">
+                <img id="imagePreview" class="image-preview" src="#" alt="Preview">
+                <small>Max 2MB (JPG, PNG, GIF only)</small>
             </div>
             
             <div class="form-group">
@@ -82,6 +105,22 @@
             <div class="form-footer">
                 <span>Already have an account? <a href="login.php">Login</a></span>
             </div>
+
+            <script>
+                document.getElementById('profile_pic').addEventListener('change', function(e) {
+                    const preview = document.getElementById('imagePreview');
+                    if (this.files && this.files[0]) {
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            preview.src = e.target.result;
+                            preview.style.display = 'block';
+                        }
+                        reader.readAsDataURL(this.files[0]);
+                    } else {
+                        preview.style.display = 'none';
+                    }
+                });
+            </script>
         </form>
     </div>
 </body>
